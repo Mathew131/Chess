@@ -10,8 +10,10 @@ int main ()
 {
     Chessboard chess{Chessboard_location};
 
-    DangerSign ds{chess.at('a', 8).center(), chess};
+    DangerSign ds{chess.at('d', 4).center(), chess};
+    chess.standard_fill();
     chess.attach(ds);
+    
     chess.wait_for_button();
 
     return 0;

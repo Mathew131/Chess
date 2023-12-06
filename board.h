@@ -59,7 +59,7 @@ struct Chessboard : MyWindow
     Sub_Vector_ref operator[](char c);
 
     //says for itself
-    Chessboard* deepcopy();
+    //Chessboard* deepcopy();
     //friend Chessboard* Chessboard::deepcopy();
 
     //friend VisualSteps* Figure::show_possible_steps(Coordinate position, Chessboard& chess);
@@ -81,16 +81,6 @@ struct Chessboard : MyWindow
     step_color step_chooser;
 
     Vector_ref<Cell> cells;
-
-    //these are made so they don't get out of scope
-    Vector_ref<Pawn> pawns;
-    Vector_ref<Rook> rooks;
-    Vector_ref<Knight> knights;
-    Vector_ref<Bishop> bishops;
-    Vector_ref<Queen> queens;
-    Vector_ref<King> kings;
-
-
 
     static void cb_clicked (Address, Address widget)
     {
