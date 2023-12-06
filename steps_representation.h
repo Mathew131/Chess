@@ -46,10 +46,13 @@ struct RedCross : Rectangle
   private:
     static constexpr int dist = 9;
 
-    Chessboard* chess;
+    std::unique_ptr<Chessboard> chess;
+    //Chessboard* chess;
 
-    Closed_polyline* rectangle_1;
-    Closed_polyline* rectangle_2;
+    std::unique_ptr<Closed_polyline> rectangle_1;
+    std::unique_ptr<Closed_polyline> rectangle_2;
+    // Closed_polyline* rectangle_1;
+    // Closed_polyline* rectangle_2;
 };
 
 // Shape that represents a frame, that fits into a cell (80*80 pixels)

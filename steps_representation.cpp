@@ -8,25 +8,25 @@ DangerSign::DangerSign(Point center, Chessboard& chess_) : Circle{center, c_size
     {
         for(int j = center.y - c_size/4; j <= center.y + c_size/4; j += c_size/2)
         {
-            std::unique_ptr<Circle> temporary_circle{new Circle{{i,j}, circle_radius}};
-            temporary_circle->set_fill_color(Graph_lib::Color::red);
-            temporary_circle->set_color(Graph_lib::Color::red);   
-            circle_of_circles.push_back(std::move(temporary_circle));
+            std::unique_ptr<Circle> t_c{new Circle{{i,j}, circle_radius}};
+            t_c->set_fill_color(Graph_lib::Color::red);
+            t_c->set_color(Graph_lib::Color::red);   
+            circle_of_circles.push_back(std::move(t_c));
         }
     }
     for(int i = center.x - c_size/4 - c_size/8; i <= center.x + c_size/4 + c_size/8; i += c_size/4 + c_size/8)
     {
-        std::unique_ptr<Circle> temporary_circle{new Circle{{i,center.y}, circle_radius}};
-        temporary_circle->set_fill_color(Graph_lib::Color::red);
-        temporary_circle->set_color(Graph_lib::Color::red);   
-        circle_of_circles.push_back(std::move(temporary_circle));
+        std::unique_ptr<Circle> t_c{new Circle{{i,center.y}, circle_radius}};
+        t_c->set_fill_color(Graph_lib::Color::red);
+        t_c->set_color(Graph_lib::Color::red);   
+        circle_of_circles.push_back(std::move(t_c));
     }
     for(int j = center.y - c_size/4 - c_size/8; j <= center.y + c_size/4 + c_size/8; j += c_size/2 + c_size/4)
     {
-        std::unique_ptr<Circle> temporary_circle{new Circle{{center.x,j}, circle_radius}};
-        temporary_circle->set_fill_color(Graph_lib::Color::red);
-        temporary_circle->set_color(Graph_lib::Color::red);   
-        circle_of_circles.push_back(std::move(temporary_circle));
+        std::unique_ptr<Circle> t_c{new Circle{{center.x,j}, circle_radius}};
+        t_c->set_fill_color(Graph_lib::Color::red);
+        t_c->set_color(Graph_lib::Color::red);   
+        circle_of_circles.push_back(std::move(t_c));
     }
 
     chess = &chess_;
@@ -55,33 +55,43 @@ void DangerSign::draw_lines() const
         circle_of_circles[i]->draw_lines();
 }
 
+
+
 RedCross::RedCross(Point center, Chessboard& chess_) : Rectangle{center, c_size, c_size}
 {
     int x = center.x;
     int y = center.y;
+    //std::unique_ptr<Circle> t_с{new Circle{{i,j}, circle_radius}};
 
-    rectangle_1 = new Closed_polyline{{x - c_size/2 + 2*dist, y - c_size/2 + dist},{x + c_size/2 - dist, y + c_size/2 - 2*dist},
-                                      {x + c_size/2 - 2*dist, y + c_size/2 - dist}, {x - c_size/2 + dist, y - c_size/2 + 2*dist}};
+    rectangle_1.reset(new Closed_polyline{{x - c_size/2 + 2*dist, y - c_size/2 + dist},{x + c_size/2 - dist, y + c_size/2 - 2*dist},
+                                      {x + c_size/2 - 2*dist, y + c_size/2 - dist}, {x - c_size/2 + dist, y - c_size/2 + 2*dist}});
+
     rectangle_1->set_color(Graph_lib::Color::red);
     rectangle_1->set_fill_color(Graph_lib::Color::red);
 
-    rectangle_2 = new Closed_polyline{{x + c_size/2 - 2*dist, y - c_size/2 + dist},{x + c_size/2 - dist, y - c_size/2 + 2*dist},
-                                      {x - c_size/2 + 2*dist, y + c_size/2 - dist},{x - c_size/2 + dist, y + c_size/2 - 2*dist}};
+    rectangle_2.reset(new Closed_polyline{{x + c_size/2 - 2*dist, y - c_size/2 + dist},{x + c_size/2 - dist, y - c_size/2 + 2*dist},
+                                      {x - c_size/2 + 2*dist, y + c_size/2 - dist},{x - c_size/2 + dist, y + c_size/2 - 2*dist}});
     rectangle_2->set_color(Graph_lib::Color::red);
     rectangle_2->set_fill_color(Graph_lib::Color::red);
 
-    chess = &chess_;
+    chess.reset(&chess_);
 }
 
 RedCross::~RedCross()
 {
     //Graph_lib::Rectangle::~Rectangle();
     chess->detach(*rectangle_1);
-    delete rectangle_1;
+
+    rectangle_1.reset();
+
     chess->detach(*rectangle_2);
-    delete rectangle_2;
+    
+    rectangle_1.reset();
+    
     chess->detach(*this);
 }
+
+
 
 void RedCross::draw_lines() const
 {
