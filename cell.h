@@ -7,16 +7,17 @@
 
 constexpr int chess_green = 116;
 constexpr int chess_white = 215;
-constexpr int chess_light_yellow = 134; // 134
+constexpr int chess_light_yellow = 134;  // 134
 
-constexpr int DFTBOF = 30; //distance_from_the_beginning_of_coordinates
+constexpr int DFTBOF = 30;  // distance_from_the_beginning_of_coordinates
 
 struct Checker;
 
-//stores coordinates on a chessboard from ('a', 1) to ('h', 8)
+// stores coordinates on a chessboard from ('a', 1) to ('h', 8)
 struct Coordinate
 {
-    Coordinate(char x_, int y_): x{x_}, y{y_} {}
+    Coordinate(char x_, int y_) : x{x_}, y{y_} {}
+
     char x;
     int y;
 };
@@ -38,7 +39,8 @@ struct Cell : Graph_lib::Button
 
     void activate ()
     {
-        if (pw) pw->color(chess_light_yellow);
+        if (pw)
+            pw->color(chess_light_yellow);
     }
 
     void deactivate () { reset_color(); }
@@ -47,7 +49,10 @@ struct Cell : Graph_lib::Button
 
     static constexpr int size = 80;
 
-    Point center () const { return Point{loc.x + width / 2, loc.y + height / 2}; }
+    Point center () const
+    {
+        return Point{loc.x + width / 2, loc.y + height / 2};
+    }
 
     void attach_figure (Figure& ch);
 
@@ -55,14 +60,15 @@ struct Cell : Graph_lib::Button
 
     bool has_figure () const { return figure != nullptr; }
 
-    //removed const and i don't know how it will turn out
-    /*const*/ Figure& get_figure ();  // обязательно нужна проверка не нулевой ли указатель checker
+    // removed const and i don't know how it will turn out
+    /*const*/ Figure& get_figure ();  // обязательно нужна проверка не
+                                      // нулевой ли указатель checker
 
-    Coordinate location() const; //gets pair {char x , int y} - coordinate of a cell
+    Coordinate
+    location () const;  // gets pair {char x , int y} - coordinate of a cell
+
   private:
-
     Type type;
     void reset_color ();
     Figure* figure{nullptr};
-
 };

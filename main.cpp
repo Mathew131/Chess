@@ -13,7 +13,7 @@ int main ()
     DangerSign ds{chess.at('d', 4).center(), chess};
     chess.standard_fill();
     chess.attach(ds);
-    
+
     chess.wait_for_button();
 
     return 0;

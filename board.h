@@ -3,22 +3,24 @@
 #include <Graph_lib/Graph.h>
 #include <Graph_lib/Simple_window.h>
 #include <iostream>
+#include <vector>
 
 using Graph_lib::Address;
 using Graph_lib::Point;
 using Graph_lib::Vector_ref;
 
-const Graph_lib::Point Chessboard_location{200,200};
+const Graph_lib::Point Chessboard_location{200, 200};
 
-//Class, that doesn't allow you to shoot yourself in the foot while
-//trying to get a "Cell" value using indices
+// Class, that doesn't allow you to shoot yourself in the foot while
+// trying to get a "Cell" value using indices
 class Sub_Vector_ref
 {
   public:
     Sub_Vector_ref() = default;
-    Sub_Vector_ref(Graph_lib::Vector_ref<Cell> v_):  v{v_} {}
 
-    Cell& operator[](int i);
+    Sub_Vector_ref(Graph_lib::Vector_ref<Cell> v_) : v{v_} {}
+
+    Cell& operator[] (int i);
 
   private:
     Graph_lib::Vector_ref<Cell> v;
@@ -43,40 +45,37 @@ struct Chessboard : MyWindow
 
     enum step_color
     {
-      white,
-      black
+        white,
+        black
     };
 
     Chessboard(Point xy);
 
-    void standard_fill();
+    void standard_fill ();
 
     static constexpr int N = 8;
     static constexpr int N_max = 8;
     static_assert(N <= N_max, "do not allow board larger than N_max*N_max");
 
-    //return a 1D array of values of a column of a 'c' coordinate
-    Sub_Vector_ref operator[](char c);
+    // return a 1D array of values of a column of a 'c' coordinate
+    Sub_Vector_ref operator[] (char c);
 
-    //says for itself
-    //Chessboard* deepcopy();
-    //friend Chessboard* Chessboard::deepcopy();
+    bool out_of_range (Coordinate pos);
 
-    //friend VisualSteps* Figure::show_possible_steps(Coordinate position, Chessboard& chess);
-
-    bool out_of_range(Coordinate pos);
-
-    Cell& at(char c, int i) {
+    Cell& at (char c, int i)
+    {
         i--;
         int j = c - 'a';
-        return cells[i*N + j];
+        return cells[i * N + j];
     }
 
   private:
-
     static constexpr int margin = 30;
     static constexpr int width = N * Cell::size + 2 * margin + 70;
     static constexpr int height = N * Cell::size + 2 * margin;
+
+    // Vector_ref<Figure*> figures;
+    std::vector<Figure*> figures;
 
     step_color step_chooser;
 
@@ -88,14 +87,18 @@ struct Chessboard : MyWindow
         dynamic_cast<Chessboard&>(btn.window()).clicked(btn);
     }
 
-
     void clicked (Cell& c);
 
-    bool decide();
+    bool decide ();
 
-    void step_swap() {step_chooser = (step_chooser == step_color::white) ? step_color::black : step_color::white;}
+    void step_swap ()
+    {
+        step_chooser = (step_chooser == step_color::white)
+                           ? step_color::black
+                           : step_color::white;
+    }
 
-    void reset_double_steps();
+    void reset_double_steps ();
 
     Graph_lib::Marks x_labels;
     Graph_lib::Marks y_labels;
