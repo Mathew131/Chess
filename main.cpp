@@ -11,6 +11,8 @@ int main ()
     Chessboard chess{Chessboard_location};
 
     DangerSign ds{chess.at('d', 4).center(), chess};
+    RedCross rc{chess.at('c', 4).center(), chess};
+    chess.attach(rc);
     chess.standard_fill();
     chess.attach(ds);
 

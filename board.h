@@ -69,6 +69,12 @@ struct Chessboard : MyWindow
         return cells[i * N + j];
     }
 
+    ~Chessboard() {
+        for (auto i : figures) {
+            delete i;
+        }
+    }
+
   private:
     static constexpr int margin = 30;
     static constexpr int width = N * Cell::size + 2 * margin + 70;

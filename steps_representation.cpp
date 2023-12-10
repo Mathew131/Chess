@@ -82,7 +82,7 @@ RedCross::RedCross(Point center, Chessboard& chess_)
     rectangle_2->set_color(Graph_lib::Color::red);
     rectangle_2->set_fill_color(Graph_lib::Color::red);
 
-    chess.reset(&chess_);
+    chess = &chess_;
 }
 
 RedCross::~RedCross()
@@ -93,7 +93,7 @@ RedCross::~RedCross()
 
     chess->detach(*rectangle_2);
 
-    rectangle_1.reset();
+    rectangle_2.reset();
 
     chess->detach(*this);
 }

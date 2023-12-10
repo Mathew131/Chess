@@ -45,7 +45,7 @@ struct RedCross : Rectangle
   private:
     static constexpr int dist = 9;
 
-    std::unique_ptr<Chessboard> chess;
+    Chessboard* chess;
 
     std::unique_ptr<Closed_polyline> rectangle_1;
     std::unique_ptr<Closed_polyline> rectangle_2;
