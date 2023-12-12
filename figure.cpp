@@ -135,11 +135,12 @@ int Pawn::correct_step(Cell& c1, Cell& c2, Chessboard& chess,
     return returning_value;
 }
 
-VisualSteps*
+std::unique_ptr <VisualSteps>
 Pawn::show_possible_steps(Coordinate position,
                           Chessboard& chess)  // moves on the board
 {
-    VisualSteps* steps_representation = new VisualSteps{chess};
+    //VisualSteps* steps_representation = new VisualSteps{chess};
+    std::unique_ptr <VisualSteps> steps_representation{new VisualSteps{chess}};
 
     int decider;
 
@@ -247,22 +248,11 @@ int Rook::correct_step(Cell& c1, Cell& c2, Chessboard& chess,
     return true;
 }
 
-VisualSteps* Rook::show_possible_steps(Coordinate position,
+std::unique_ptr <VisualSteps> Rook::show_possible_steps(Coordinate position,
                                        Chessboard& chess)
 {
-    VisualSteps* steps_representation = new VisualSteps{chess};
-
-    horisontal_possible_steps(position, chess, steps_representation);
-    vertical_possible_steps(position, chess, steps_representation);
-
-    return steps_representation;
-}
-
-void Rook::horisontal_possible_steps(Coordinate& position,
-                                     Chessboard& chess,
-                                     VisualSteps*& steps_representation)
-{
-    // d is made to reduce copy + paste
+    std::unique_ptr <VisualSteps> steps_representation{new VisualSteps{chess}};
+    
     for (int d = -1; d <= 1; d += 2)
     {
         for (int i = int(position.x) + d;
@@ -297,12 +287,7 @@ void Rook::horisontal_possible_steps(Coordinate& position,
             }
         }
     }
-}
 
-void Rook::vertical_possible_steps(Coordinate& position, Chessboard& chess,
-                                   VisualSteps*& steps_representation)
-{
-    // d is made to reduce copy + paste
     for (int d = -1; d <= 1; d += 2)
     {
         for (int i = position.y + d; i != int(4.5 + 4.5 * d); i += d)
@@ -336,6 +321,7 @@ void Rook::vertical_possible_steps(Coordinate& position, Chessboard& chess,
             }
         }
     }
+    return steps_representation;
 }
 
 int Knight::correct_step(Cell& c1, Cell& c2, Chessboard& chess,
@@ -369,11 +355,11 @@ int Knight::correct_step(Cell& c1, Cell& c2, Chessboard& chess,
     return true;
 }
 
-VisualSteps* Knight::show_possible_steps(Coordinate position,
+std::unique_ptr <VisualSteps> Knight::show_possible_steps(Coordinate position,
                                          Chessboard& chess)
 {
 
-    VisualSteps* steps_representation = new VisualSteps{chess};
+    std::unique_ptr <VisualSteps> steps_representation{new VisualSteps{chess}};
 
     int x = int(position.x);
     int y = position.y;
@@ -456,10 +442,10 @@ int Bishop::correct_step(Cell& c1, Cell& c2, Chessboard& chess,
     return true;
 }
 
-VisualSteps* Bishop::show_possible_steps(Coordinate position,
+std::unique_ptr <VisualSteps> Bishop::show_possible_steps(Coordinate position,
                                          Chessboard& chess)
 {
-    VisualSteps* steps_representation = new VisualSteps{chess};
+    std::unique_ptr <VisualSteps> steps_representation{new VisualSteps{chess}};
 
     int x0 = int(position.x);
     int y0 = position.y;
@@ -474,46 +460,39 @@ VisualSteps* Bishop::show_possible_steps(Coordinate position,
             x = int(position.x) + d1;
             y = position.y + d2;
 
-            show_possible_steps_HF(x, y, x0, y0, d1, d2,
-                                   steps_representation, chess);
+            // show_possible_steps_HF(x, y, x0, y0, d1, d2,
+            //                        steps_representation, chess);
+            while (!chess.out_of_range(Coordinate{char(x), y}))
+            {
+            if (correct_step(chess[char(x0)][y0], chess[char(x)][y], chess))
+            {
+                if (chess[char(x)][y].has_figure())
+                {
+                    Frame* tempf = new Frame{chess[char(x)][y].center(), chess};
+                    steps_representation->possible_takes.push_back(tempf);
+                    int sz = steps_representation->possible_takes.size();
+                    chess.attach(steps_representation->possible_takes[sz - 1]);
+                    // delete tempf;
+                    break;
+                }
+                else
+                {
+                    Circle* tempc =
+                        new Circle{chess[char(x)][y].center(), c_size / 4};
+                    tempc->set_color(chess_yellow);
+                    tempc->set_fill_color(chess_yellow);
+                    steps_representation->possible_steps.push_back(tempc);
+                    int sz = steps_representation->possible_steps.size();
+                    chess.attach(steps_representation->possible_steps[sz - 1]);
+                }
+            }
+            x += d1;
+            y += d2;
+        }
         }
     }
 
     return steps_representation;
-}
-
-void Bishop::show_possible_steps_HF(int x, int y, int x0, int y0, int d1,
-                                    int d2,
-                                    VisualSteps*& steps_representation,
-                                    Chessboard& chess)
-{
-    while (!chess.out_of_range(Coordinate{char(x), y}))
-    {
-        if (correct_step(chess[char(x0)][y0], chess[char(x)][y], chess))
-        {
-            if (chess[char(x)][y].has_figure())
-            {
-                Frame* tempf = new Frame{chess[char(x)][y].center(), chess};
-                steps_representation->possible_takes.push_back(tempf);
-                int sz = steps_representation->possible_takes.size();
-                chess.attach(steps_representation->possible_takes[sz - 1]);
-                // delete tempf;
-                break;
-            }
-            else
-            {
-                Circle* tempc =
-                    new Circle{chess[char(x)][y].center(), c_size / 4};
-                tempc->set_color(chess_yellow);
-                tempc->set_fill_color(chess_yellow);
-                steps_representation->possible_steps.push_back(tempc);
-                int sz = steps_representation->possible_steps.size();
-                chess.attach(steps_representation->possible_steps[sz - 1]);
-            }
-        }
-        x += d1;
-        y += d2;
-    }
 }
 
 int Queen::correct_step(Cell& c1, Cell& c2, Chessboard& chess,
@@ -584,31 +563,18 @@ int Queen::correct_step(Cell& c1, Cell& c2, Chessboard& chess,
     return true;
 }
 
-VisualSteps* Queen::show_possible_steps(Coordinate position,
+std::unique_ptr <VisualSteps> Queen::show_possible_steps(Coordinate position,
                                         Chessboard& chess)
 {
-    VisualSteps* steps_representation = new VisualSteps{chess};
+    std::unique_ptr <VisualSteps> steps_representation{new VisualSteps{chess}};
 
     int x0 = int(position.x);
     int y0 = position.y;
 
     int x, y;
 
-    horisontal_possible_steps(position, chess, steps_representation);
-    vertical_possible_steps(position, chess, steps_representation);
-    diagnal_possible_steps(x, y, x0, y0, position, chess,
-                           steps_representation);
-
-    return steps_representation;
-}
-
-void Queen::horisontal_possible_steps(Coordinate& position,
-                                      Chessboard& chess,
-                                      VisualSteps*& steps_representation)
-{
-    // d is made to reduce copy + paste
     for (int d = -1; d <= 1; d += 2)
-    {
+        {
         for (int i = int(position.x) + d;
              i != a_ascii - 1 + (4.5 + 4.5 * d); i += d)
         {
@@ -641,12 +607,7 @@ void Queen::horisontal_possible_steps(Coordinate& position,
             }
         }
     }
-}
 
-void Queen::vertical_possible_steps(Coordinate& position, Chessboard& chess,
-                                    VisualSteps*& steps_representation)
-{
-    // d is made to reduce copy + paste
     for (int d = -1; d <= 1; d += 2)
     {
         for (int i = position.y + d; i != int(4.5 + 4.5 * d); i += d)
@@ -680,13 +641,7 @@ void Queen::vertical_possible_steps(Coordinate& position, Chessboard& chess,
             }
         }
     }
-}
 
-void Queen::diagnal_possible_steps(int x, int y, int x0, int y0,
-                                   Coordinate& position, Chessboard& chess,
-                                   VisualSteps*& steps_representation)
-{
-    // d1, d2 - decider1, decider2 - those are used to reduce copy + paste
     for (int d1 = -1; d1 <= 1; d1 += 2)
     {
         for (int d2 = -1; d2 <= 1; d2 += 2)
@@ -694,17 +649,6 @@ void Queen::diagnal_possible_steps(int x, int y, int x0, int y0,
             x = int(position.x) + d1;
             y = position.y + d2;
 
-            show_possible_steps_HF(x, y, x0, y0, d1, d2,
-                                   steps_representation, chess);
-        }
-    }
-}
-
-void Queen::show_possible_steps_HF(int x, int y, int x0, int y0, int d1,
-                                   int d2,
-                                   VisualSteps*& steps_representation,
-                                   Chessboard& chess)
-{
     while (!chess.out_of_range(Coordinate{char(x), y}))
     {
         if (correct_step(chess[char(x0)][y0], chess[char(x)][y], chess))
@@ -731,7 +675,10 @@ void Queen::show_possible_steps_HF(int x, int y, int x0, int y0, int d1,
         }
         x += d1;
         y += d2;
+        }
+        }
     }
+    return steps_representation;
 }
 
 int King::correct_step(Cell& c1, Cell& c2, Chessboard& chess,
@@ -746,12 +693,12 @@ int King::correct_step(Cell& c1, Cell& c2, Chessboard& chess,
     return true;
 }
 
-VisualSteps* King::show_possible_steps(Coordinate position,
+std::unique_ptr <VisualSteps> King::show_possible_steps(Coordinate position,
                                        Chessboard& chess)
 {
     // I know it's less effective, but easier to read, maybe should be
     // rewritten
-    VisualSteps* steps_representation = new VisualSteps{chess};
+    std::unique_ptr <VisualSteps> steps_representation{new VisualSteps{chess}};
     for (int i = 0; i < chess.N; i++)
         for (int j = 1; j <= chess.N; j++)
         {

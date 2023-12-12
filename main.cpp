@@ -17,7 +17,7 @@ int main ()
 {
     Chessboard chess{Chessboard_location};
 
-    demo(chess);
+    // demo(chess);
     
     chess.standard_fill();
     

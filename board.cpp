@@ -92,79 +92,81 @@ void Chessboard::standard_fill()
     // белые пешки
     for (int i = 0; i < 8; i++)
     {
-        figures.push_back(std::move(std::unique_ptr<Pawn>(new Pawn(*this, Figure::Type::white))));
-        at(char(a_ascii + i), 2).attach_figure(*figures[figures.size()-1]);
+        figures.push_back(std::make_unique<Pawn>(*this, Figure::Type::white));
+        at(char(a_ascii + i), 2)
+            .attach_figure(*figures[figures.size() - 1]);
     }
 
     // чёрные пешки
     for (int i = 8; i < 16; i++)
     {
-        figures.push_back(std::move(std::unique_ptr<Pawn>(new Pawn(*this, Figure::Type::black))));
-        at(char(a_ascii + i % 8), 7).attach_figure(*figures[figures.size()-1]);
+        figures.push_back(std::make_unique<Pawn>(*this, Figure::Type::black));
+        at(char(a_ascii + i % 8), 7)
+            .attach_figure(*figures[figures.size() - 1]);
     }
 
     // белые кони
-    
-    figures.push_back(std::move(std::unique_ptr<Knight>(new Knight(*this, Figure::Type::white))));
-    figures.push_back(std::move(std::unique_ptr<Knight>(new Knight(*this, Figure::Type::white))));
 
-    at('b', 1).attach_figure(*figures[figures.size()-2]);
-    at('g', 1).attach_figure(*figures[figures.size()-1]);
+    figures.push_back(std::make_unique<Knight>(*this, Figure::Type::white));
+    figures.push_back(std::make_unique<Knight>(*this, Figure::Type::white));
 
-    // черыне кони 
-    figures.push_back(std::move(std::unique_ptr<Knight>(new Knight(*this, Figure::Type::black))));
-    figures.push_back(std::move(std::unique_ptr<Knight>(new Knight(*this, Figure::Type::black))));
+    at('b', 1).attach_figure(*figures[figures.size() - 2]);
+    at('g', 1).attach_figure(*figures[figures.size() - 1]);
 
-    at('b', 8).attach_figure(*figures[figures.size()-2]);
-    at('g', 8).attach_figure(*figures[figures.size()-1]);
+    // черыне кони
+    figures.push_back(std::make_unique<Knight>(*this, Figure::Type::black));
+    figures.push_back(std::make_unique<Knight>(*this, Figure::Type::black));
+
+    at('b', 8).attach_figure(*figures[figures.size() - 2]);
+    at('g', 8).attach_figure(*figures[figures.size() - 1]);
 
     // белые слоны
-    figures.push_back(std::move(std::unique_ptr<Bishop>(new Bishop(*this, Figure::Type::white))));
-    figures.push_back(std::move(std::unique_ptr<Bishop>(new Bishop(*this, Figure::Type::white))));
+    figures.push_back(std::make_unique<Bishop>(*this, Figure::Type::white));
+    figures.push_back(std::make_unique<Bishop>(*this, Figure::Type::white));
 
-    at('c', 1).attach_figure(*figures[figures.size()-2]);
-    at('f', 1).attach_figure(*figures[figures.size()-1]);
+    at('c', 1).attach_figure(*figures[figures.size() - 2]);
+    at('f', 1).attach_figure(*figures[figures.size() - 1]);
 
     // черные слоны
-    figures.push_back(std::move(std::unique_ptr<Bishop>(new Bishop(*this, Figure::Type::black))));
-    figures.push_back(std::move(std::unique_ptr<Bishop>(new Bishop(*this, Figure::Type::black))));
+    figures.push_back(std::make_unique<Bishop>(*this, Figure::Type::black));
+    figures.push_back(std::make_unique<Bishop>(*this, Figure::Type::black));
 
-    at('c', 8).attach_figure(*figures[figures.size()-2]);
-    at('f', 8).attach_figure(*figures[figures.size()-1]);
+    at('c', 8).attach_figure(*figures[figures.size() - 2]);
+    at('f', 8).attach_figure(*figures[figures.size() - 1]);
 
     // белые ладьи
-    figures.push_back(std::move(std::unique_ptr<Rook>(new Rook(*this, Figure::Type::white))));
-    figures.push_back(std::move(std::unique_ptr<Rook>(new Rook(*this, Figure::Type::white))));
+    figures.push_back(std::make_unique<Rook>(*this, Figure::Type::white));
+    figures.push_back(std::make_unique<Rook>(*this, Figure::Type::white));
 
-    at('a', 1).attach_figure(*figures[figures.size()-2]);
-    at('h', 1).attach_figure(*figures[figures.size()-1]);
+    at('a', 1).attach_figure(*figures[figures.size() - 2]);
+    at('h', 1).attach_figure(*figures[figures.size() - 1]);
 
     // черные ладьи
-    figures.push_back(std::move(std::unique_ptr<Rook>(new Rook(*this, Figure::Type::black))));
-    figures.push_back(std::move(std::unique_ptr<Rook>(new Rook(*this, Figure::Type::black))));
+    figures.push_back(std::make_unique<Rook>(*this, Figure::Type::black));
+    figures.push_back(std::make_unique<Rook>(*this, Figure::Type::black));
 
-    at('a', 8).attach_figure(*figures[figures.size()-2]);
-    at('h', 8).attach_figure(*figures[figures.size()-1]);
+    at('a', 8).attach_figure(*figures[figures.size() - 2]);
+    at('h', 8).attach_figure(*figures[figures.size() - 1]);
 
     // Белый король
-    figures.push_back(std::move(std::unique_ptr<King>(new King(*this, Figure::Type::white))));
+    figures.push_back(std::make_unique<King>(*this, Figure::Type::white));
 
-    at('e', 1).attach_figure(*figures[figures.size()-1]);
+    at('e', 1).attach_figure(*figures[figures.size() - 1]);
 
     // Черный король
-    figures.push_back(std::move(std::unique_ptr<King>(new King(*this, Figure::Type::black))));
+    figures.push_back(std::make_unique<King>(*this, Figure::Type::black));
 
-    at('e', 8).attach_figure(*figures[figures.size()-1]);
+    at('e', 8).attach_figure(*figures[figures.size() - 1]);
 
     // Белый ферзь
-    figures.push_back(std::move(std::unique_ptr<Queen>(new Queen(*this, Figure::Type::white))));
+    figures.push_back(std::make_unique<Queen>(*this, Figure::Type::white));
 
-    at('d', 1).attach_figure(*figures[figures.size()-1]);
+    at('d', 1).attach_figure(*figures[figures.size() - 1]);
 
     // Черный ферзь
-    figures.push_back(std::move(std::unique_ptr<Queen>(new Queen(*this, Figure::Type::black))));
+    figures.push_back(std::make_unique<Queen>(*this, Figure::Type::black));
 
-    at('d', 8).attach_figure(*figures[figures.size()-1]);
+    at('d', 8).attach_figure(*figures[figures.size() - 1]);
 }
 
 void Chessboard::clicked(Cell& c)
@@ -180,8 +182,7 @@ void Chessboard::clicked(Cell& c)
             return;
         }
         // Create visual representation of moves for current figure
-        all_possible_steps =
-            c.get_figure().show_possible_steps(c.location(), *this);
+        all_possible_steps = c.get_figure().show_possible_steps(c.location(), *this);
     }
     else
     {
@@ -229,10 +230,11 @@ void Chessboard::clicked(Cell& c)
         // the current figure
         if (all_possible_steps != nullptr)
         {
-            delete all_possible_steps;
             all_possible_steps = nullptr;
         }
         selected = nullptr;
+        if (c.has_figure())
+            Chessboard::clicked(c);
     }
     Fl::redraw();
 }

@@ -3,6 +3,7 @@
 #include "steps_representation.h"
 #include <Graph_lib/Graph.h>
 #include <Graph_lib/Simple_window.h>
+#include <memory>
 
 constexpr int a_ascii = 97;  // ascii code of letter 'a'
 
@@ -35,7 +36,7 @@ struct Figure : Graph_lib::Image
 
     // Creates an object "VisualSteps" that is required to show all possible
     // moves of currently clicked figure
-    virtual VisualSteps* show_possible_steps (Coordinate position,
+    virtual std::unique_ptr <VisualSteps> show_possible_steps (Coordinate position,
                                               Chessboard& chess) = 0;
 
     virtual bool can_take_king (Chessboard& chess, Cell& king_position)
@@ -101,7 +102,7 @@ struct Pawn : Figure
 
     int correct_step (Cell& c1, Cell& c2, Chessboard& chess,
                       bool ensure_king_is_safe = true);
-    VisualSteps* show_possible_steps (Coordinate position,
+    std::unique_ptr <VisualSteps> show_possible_steps (Coordinate position,
                                       Chessboard& chess) override;
 
     bool is_pawn () override { return true; }
@@ -118,7 +119,7 @@ struct King : Figure
 
     int correct_step (Cell& c1, Cell& c2, Chessboard& chess,
                       bool ensure_king_is_safe = true) override;
-    VisualSteps* show_possible_steps (Coordinate position,
+    std::unique_ptr <VisualSteps> show_possible_steps (Coordinate position,
                                       Chessboard& chess) override;
 
     bool is_king () override { return true; }
@@ -131,16 +132,11 @@ struct Bishop : Figure
 
     int correct_step (Cell& c1, Cell& c2, Chessboard& chess,
                       bool ensure_king_is_safe = true) override;
-    VisualSteps* show_possible_steps (Coordinate position,
+    std::unique_ptr <VisualSteps> show_possible_steps (Coordinate position,
                                       Chessboard& chess) override;
 
     bool is_bishop () override { return true; }
 
-  private:
-    // HF - help function
-    void show_possible_steps_HF (int x, int y, int x0, int y0, int d1,
-                                 int d2, VisualSteps*& steps_representation,
-                                 Chessboard& chess);
 };
 
 struct Knight : Figure
@@ -150,7 +146,7 @@ struct Knight : Figure
 
     int correct_step (Cell& c1, Cell& c2, Chessboard& chess,
                       bool ensure_king_is_safe = true) override;
-    VisualSteps* show_possible_steps (Coordinate position,
+    std::unique_ptr <VisualSteps> show_possible_steps (Coordinate position,
                                       Chessboard& chess) override;
 
     bool is_knight () { return true; }
@@ -163,22 +159,10 @@ struct Queen : Figure
 
     int correct_step (Cell& c1, Cell& c2, Chessboard& chess,
                       bool ensure_king_is_safe = true) override;
-    VisualSteps* show_possible_steps (Coordinate position,
+    std::unique_ptr <VisualSteps> show_possible_steps (Coordinate position,
                                       Chessboard& chess) override;
 
     virtual bool is_queen () { return true; }
-
-  private:
-    void horisontal_possible_steps (Coordinate& position, Chessboard& chess,
-                                    VisualSteps*& steps_representation);
-    void vertical_possible_steps (Coordinate& position, Chessboard& chess,
-                                  VisualSteps*& steps_representation);
-    void diagnal_possible_steps (int x, int y, int x0, int y0,
-                                 Coordinate& position, Chessboard& chess,
-                                 VisualSteps*& steps_representation);
-    void show_possible_steps_HF (int x, int y, int x0, int y0, int d1,
-                                 int d2, VisualSteps*& steps_representation,
-                                 Chessboard& chess);
 };
 
 struct Rook : Figure
@@ -188,14 +172,8 @@ struct Rook : Figure
 
     int correct_step (Cell& c1, Cell& c2, Chessboard& chess,
                       bool ensure_king_is_safe = true) override;
-    VisualSteps* show_possible_steps (Coordinate position,
+    std::unique_ptr <VisualSteps> show_possible_steps (Coordinate position,
                                       Chessboard& chess) override;
 
     bool is_rook () { return true; }
-
-  private:
-    void horisontal_possible_steps (Coordinate& position, Chessboard& chess,
-                                    VisualSteps*& steps_representation);
-    void vertical_possible_steps (Coordinate& position, Chessboard& chess,
-                                  VisualSteps*& steps_representation);
 };

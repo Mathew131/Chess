@@ -105,5 +105,6 @@ struct Chessboard : MyWindow
 
     Cell* selected{nullptr};
 
-    VisualSteps* all_possible_steps;
+    std::unique_ptr <VisualSteps> all_possible_steps;
+    //VisualSteps* all_possible_steps;
 };
