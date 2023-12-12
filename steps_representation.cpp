@@ -46,7 +46,7 @@ DangerSign::~DangerSign()
     {
         chess->detach(*circle_of_circles[i]);
 
-        circle_of_circles[i].reset();
+        // circle_of_circles[i].reset();
 
         chess->detach(*this);
     }

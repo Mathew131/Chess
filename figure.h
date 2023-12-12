@@ -104,8 +104,6 @@ struct Pawn : Figure
     VisualSteps* show_possible_steps (Coordinate position,
                                       Chessboard& chess) override;
 
-    Pawn* deepcopy (Chessboard& chess);
-
     bool is_pawn () override { return true; }
 
     bool double_step0 () override { return double_step; }
@@ -123,8 +121,6 @@ struct King : Figure
     VisualSteps* show_possible_steps (Coordinate position,
                                       Chessboard& chess) override;
 
-    King* deepcopy (Chessboard& chess);
-
     bool is_king () override { return true; }
 };
 
@@ -137,8 +133,6 @@ struct Bishop : Figure
                       bool ensure_king_is_safe = true) override;
     VisualSteps* show_possible_steps (Coordinate position,
                                       Chessboard& chess) override;
-
-    Bishop* deepcopy (Chessboard& chess);
 
     bool is_bishop () override { return true; }
 
@@ -159,10 +153,6 @@ struct Knight : Figure
     VisualSteps* show_possible_steps (Coordinate position,
                                       Chessboard& chess) override;
 
-    Knight* deepcopy (Chessboard& chess);
-
-    // friend Knight* Knight::deepcopy(Chessboard& chess);
-
     bool is_knight () { return true; }
 };
 
@@ -175,10 +165,6 @@ struct Queen : Figure
                       bool ensure_king_is_safe = true) override;
     VisualSteps* show_possible_steps (Coordinate position,
                                       Chessboard& chess) override;
-
-    Queen* deepcopy (Chessboard& chess);
-
-    // friend Queen* Queen::deepcopy(Chessboard& chess);
 
     virtual bool is_queen () { return true; }
 
@@ -204,8 +190,6 @@ struct Rook : Figure
                       bool ensure_king_is_safe = true) override;
     VisualSteps* show_possible_steps (Coordinate position,
                                       Chessboard& chess) override;
-
-    Rook* deepcopy (Chessboard& chess);
 
     bool is_rook () { return true; }
 
