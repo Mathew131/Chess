@@ -46,11 +46,8 @@ DangerSign::~DangerSign()
     {
         chess->detach(*circle_of_circles[i]);
 
-        // circle_of_circles[i].reset();
-
         chess->detach(*this);
     }
-    circle_of_circles.clear();
 }
 
 void DangerSign::draw_lines() const
@@ -89,11 +86,7 @@ RedCross::~RedCross()
 {
     chess->detach(*rectangle_1);
 
-    rectangle_1.reset();
-
     chess->detach(*rectangle_2);
-
-    rectangle_2.reset();
 
     chess->detach(*this);
 }

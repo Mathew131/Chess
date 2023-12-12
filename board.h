@@ -69,19 +69,13 @@ struct Chessboard : MyWindow
         return cells[i * N + j];
     }
 
-    ~Chessboard() {
-        for (auto i : figures) {
-            delete i;
-        }
-    }
-
   private:
     static constexpr int margin = 30;
     static constexpr int width = N * Cell::size + 2 * margin + 70;
     static constexpr int height = N * Cell::size + 2 * margin;
 
     // Vector_ref<Figure*> figures;
-    std::vector<Figure*> figures;
+    std::vector<std::unique_ptr<Figure>> figures;
 
     step_color step_chooser;
 

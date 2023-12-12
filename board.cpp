@@ -92,105 +92,79 @@ void Chessboard::standard_fill()
     // белые пешки
     for (int i = 0; i < 8; i++)
     {
-        Pawn* temp_pawn = new Pawn(*this, Figure::Type::white);
-        figures.push_back(temp_pawn);
-        at(char(a_ascii + i), 2).attach_figure(*temp_pawn);
+        figures.push_back(std::move(std::unique_ptr<Pawn>(new Pawn(*this, Figure::Type::white))));
+        at(char(a_ascii + i), 2).attach_figure(*figures[figures.size()-1]);
     }
 
     // чёрные пешки
     for (int i = 8; i < 16; i++)
     {
-        Pawn* temp_pawn = new Pawn(*this, Figure::Type::black);
-        figures.push_back(temp_pawn);
-        at(char(a_ascii + i % 8), 7).attach_figure(*temp_pawn);
+        figures.push_back(std::move(std::unique_ptr<Pawn>(new Pawn(*this, Figure::Type::black))));
+        at(char(a_ascii + i % 8), 7).attach_figure(*figures[figures.size()-1]);
     }
 
     // белые кони
-    Knight* wn0 = new Knight{*this, Figure::Type::white};
-    Knight* wn1 = new Knight{*this, Figure::Type::white};
+    
+    figures.push_back(std::move(std::unique_ptr<Knight>(new Knight(*this, Figure::Type::white))));
+    figures.push_back(std::move(std::unique_ptr<Knight>(new Knight(*this, Figure::Type::white))));
 
-    figures.push_back(wn0);
-    figures.push_back(wn1);
+    at('b', 1).attach_figure(*figures[figures.size()-2]);
+    at('g', 1).attach_figure(*figures[figures.size()-1]);
 
-    at('b', 1).attach_figure(*wn0);
-    at('g', 1).attach_figure(*wn1);
+    // черыне кони 
+    figures.push_back(std::move(std::unique_ptr<Knight>(new Knight(*this, Figure::Type::black))));
+    figures.push_back(std::move(std::unique_ptr<Knight>(new Knight(*this, Figure::Type::black))));
 
-    // черыне кони
-    Knight* bn0 = new Knight{*this, Figure::Type::black};
-    Knight* bn1 = new Knight{*this, Figure::Type::black};
-
-    figures.push_back(bn0);
-    figures.push_back(bn1);
-
-    at('b', 8).attach_figure(*bn0);
-    at('g', 8).attach_figure(*bn1);
+    at('b', 8).attach_figure(*figures[figures.size()-2]);
+    at('g', 8).attach_figure(*figures[figures.size()-1]);
 
     // белые слоны
-    Bishop* wb0 = new Bishop{*this, Figure::Type::white};
-    Bishop* wb1 = new Bishop{*this, Figure::Type::white};
+    figures.push_back(std::move(std::unique_ptr<Bishop>(new Bishop(*this, Figure::Type::white))));
+    figures.push_back(std::move(std::unique_ptr<Bishop>(new Bishop(*this, Figure::Type::white))));
 
-    figures.push_back(wb0);
-    figures.push_back(wb1);
-
-    at('c', 1).attach_figure(*wb0);
-    at('f', 1).attach_figure(*wb1);
+    at('c', 1).attach_figure(*figures[figures.size()-2]);
+    at('f', 1).attach_figure(*figures[figures.size()-1]);
 
     // черные слоны
-    Bishop* bb0 = new Bishop{*this, Figure::Type::black};
-    Bishop* bb1 = new Bishop{*this, Figure::Type::black};
+    figures.push_back(std::move(std::unique_ptr<Bishop>(new Bishop(*this, Figure::Type::black))));
+    figures.push_back(std::move(std::unique_ptr<Bishop>(new Bishop(*this, Figure::Type::black))));
 
-    figures.push_back(bb0);
-    figures.push_back(bb1);
-
-    at('c', 8).attach_figure(*bb0);
-    at('f', 8).attach_figure(*bb1);
+    at('c', 8).attach_figure(*figures[figures.size()-2]);
+    at('f', 8).attach_figure(*figures[figures.size()-1]);
 
     // белые ладьи
-    Rook* wr0 = new Rook{*this, Figure::Type::white};
-    Rook* wr1 = new Rook{*this, Figure::Type::white};
+    figures.push_back(std::move(std::unique_ptr<Rook>(new Rook(*this, Figure::Type::white))));
+    figures.push_back(std::move(std::unique_ptr<Rook>(new Rook(*this, Figure::Type::white))));
 
-    figures.push_back(wr0);
-    figures.push_back(wr1);
-
-    at('a', 1).attach_figure(*wr0);
-    at('h', 1).attach_figure(*wr1);
+    at('a', 1).attach_figure(*figures[figures.size()-2]);
+    at('h', 1).attach_figure(*figures[figures.size()-1]);
 
     // черные ладьи
-    Rook* br0 = new Rook{*this, Figure::Type::black};
-    Rook* br1 = new Rook{*this, Figure::Type::black};
+    figures.push_back(std::move(std::unique_ptr<Rook>(new Rook(*this, Figure::Type::black))));
+    figures.push_back(std::move(std::unique_ptr<Rook>(new Rook(*this, Figure::Type::black))));
 
-    figures.push_back(br0);
-    figures.push_back(br1);
-
-    at('a', 8).attach_figure(*br0);
-    at('h', 8).attach_figure(*br1);
+    at('a', 8).attach_figure(*figures[figures.size()-2]);
+    at('h', 8).attach_figure(*figures[figures.size()-1]);
 
     // Белый король
-    King* wk = new King{*this, Figure::Type::white};
+    figures.push_back(std::move(std::unique_ptr<King>(new King(*this, Figure::Type::white))));
 
-    figures.push_back(wk);
-
-    at('e', 1).attach_figure(*wk);
+    at('e', 1).attach_figure(*figures[figures.size()-1]);
 
     // Черный король
-    King* bk = new King{*this, Figure::Type::black};
+    figures.push_back(std::move(std::unique_ptr<King>(new King(*this, Figure::Type::black))));
 
-    figures.push_back(bk);
-
-    at('e', 8).attach_figure(*bk);
+    at('e', 8).attach_figure(*figures[figures.size()-1]);
 
     // Белый ферзь
-    Queen* wq = new Queen{*this, Figure::Type::white};
+    figures.push_back(std::move(std::unique_ptr<Queen>(new Queen(*this, Figure::Type::white))));
 
-    at('d', 1).attach_figure(*wq);
+    at('d', 1).attach_figure(*figures[figures.size()-1]);
 
-    figures.push_back(wq);
     // Черный ферзь
-    Queen* bq = new Queen{*this, Figure::Type::black};
+    figures.push_back(std::move(std::unique_ptr<Queen>(new Queen(*this, Figure::Type::black))));
 
-    figures.push_back(bq);
-
-    at('d', 8).attach_figure(*bq);
+    at('d', 8).attach_figure(*figures[figures.size()-1]);
 }
 
 void Chessboard::clicked(Cell& c)

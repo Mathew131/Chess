@@ -6,17 +6,22 @@
 
 extern const Graph_lib::Point Chessboard_location;
 
+void demo(Chessboard& chess) {
+    DangerSign ds{chess.at('d', 4).center(), chess};
+    RedCross rc{chess.at('c', 4).center(), chess};
+    chess.attach(rc);
+    chess.attach(ds);
+}
+
 int main ()
 {
     Chessboard chess{Chessboard_location};
 
-    DangerSign ds{chess.at('d', 4).center(), chess};
-    RedCross rc{chess.at('c', 4).center(), chess};
-    chess.attach(rc);
+    demo(chess);
+    
     chess.standard_fill();
-    chess.attach(ds);
-
+    
     chess.wait_for_button();
-
+    
     return 0;
 }
