@@ -13,7 +13,6 @@ constexpr int DFTBOF = 30;  // distance_from_the_beginning_of_coordinates
 
 struct Checker;
 
-// stores coordinates on a chessboard from ('a', 1) to ('h', 8)
 struct Coordinate
 {
     Coordinate(char x_, int y_) : x{x_}, y{y_} {}

@@ -1,8 +1,6 @@
 #include "cell.h"
-//
 #include "figure.h"
 #include <iostream>
-// #include "pawn.h"
 
 using namespace Graph_lib;
 

@@ -15,7 +15,7 @@ struct Coordinate;
 struct VisualSteps;
 
 struct Figure : Graph_lib::Image
-{  // Graph_lib::Image
+{ 
 
     enum Type
     {

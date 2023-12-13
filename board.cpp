@@ -228,10 +228,7 @@ void Chessboard::clicked(Cell& c)
 
         // Clear the screen from visual representation of possible moves for
         // the current figure
-        if (all_possible_steps != nullptr)
-        {
-            all_possible_steps = nullptr;
-        }
+        all_possible_steps.reset();
         selected = nullptr;
         if (c.has_figure())
             Chessboard::clicked(c);

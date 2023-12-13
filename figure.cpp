@@ -135,12 +135,12 @@ int Pawn::correct_step(Cell& c1, Cell& c2, Chessboard& chess,
     return returning_value;
 }
 
-std::unique_ptr <VisualSteps>
+std::unique_ptr<VisualSteps>
 Pawn::show_possible_steps(Coordinate position,
                           Chessboard& chess)  // moves on the board
 {
-    //VisualSteps* steps_representation = new VisualSteps{chess};
-    std::unique_ptr <VisualSteps> steps_representation{new VisualSteps{chess}};
+    std::unique_ptr<VisualSteps> steps_representation{
+        new VisualSteps{chess}};
 
     int decider;
 
@@ -173,7 +173,6 @@ Pawn::show_possible_steps(Coordinate position,
             steps_representation->possible_steps.push_back(tempc);
             int sz = steps_representation->possible_steps.size();
             chess.attach(steps_representation->possible_steps[sz - 1]);
-            // delete tempc;
         }
     }
     for (int i = -1; i <= 1; i += 2)
@@ -203,7 +202,6 @@ Pawn::show_possible_steps(Coordinate position,
                 steps_representation->possible_takes.push_back(tempf);
                 int sz = steps_representation->possible_takes.size();
                 chess.attach(steps_representation->possible_takes[sz - 1]);
-                // delete tempf;
             }
         }
     }
@@ -248,11 +246,12 @@ int Rook::correct_step(Cell& c1, Cell& c2, Chessboard& chess,
     return true;
 }
 
-std::unique_ptr <VisualSteps> Rook::show_possible_steps(Coordinate position,
-                                       Chessboard& chess)
+std::unique_ptr<VisualSteps> Rook::show_possible_steps(Coordinate position,
+                                                       Chessboard& chess)
 {
-    std::unique_ptr <VisualSteps> steps_representation{new VisualSteps{chess}};
-    
+    std::unique_ptr<VisualSteps> steps_representation{
+        new VisualSteps{chess}};
+
     for (int d = -1; d <= 1; d += 2)
     {
         for (int i = int(position.x) + d;
@@ -269,7 +268,6 @@ std::unique_ptr <VisualSteps> Rook::show_possible_steps(Coordinate position,
                     int sz = steps_representation->possible_takes.size();
                     chess.attach(
                         steps_representation->possible_takes[sz - 1]);
-                    // delete tempf;
                     break;
                 }
                 else
@@ -282,7 +280,6 @@ std::unique_ptr <VisualSteps> Rook::show_possible_steps(Coordinate position,
                     int sz = steps_representation->possible_steps.size();
                     chess.attach(
                         steps_representation->possible_steps[sz - 1]);
-                    // delete tempc;
                 }
             }
         }
@@ -303,7 +300,6 @@ std::unique_ptr <VisualSteps> Rook::show_possible_steps(Coordinate position,
                     int sz = steps_representation->possible_takes.size();
                     chess.attach(
                         steps_representation->possible_takes[sz - 1]);
-                    // delete tempf;
                     break;
                 }
                 else
@@ -316,7 +312,6 @@ std::unique_ptr <VisualSteps> Rook::show_possible_steps(Coordinate position,
                     int sz = steps_representation->possible_steps.size();
                     chess.attach(
                         steps_representation->possible_steps[sz - 1]);
-                    // delete tempc;
                 }
             }
         }
@@ -355,11 +350,12 @@ int Knight::correct_step(Cell& c1, Cell& c2, Chessboard& chess,
     return true;
 }
 
-std::unique_ptr <VisualSteps> Knight::show_possible_steps(Coordinate position,
-                                         Chessboard& chess)
+std::unique_ptr<VisualSteps>
+Knight::show_possible_steps(Coordinate position, Chessboard& chess)
 {
 
-    std::unique_ptr <VisualSteps> steps_representation{new VisualSteps{chess}};
+    std::unique_ptr<VisualSteps> steps_representation{
+        new VisualSteps{chess}};
 
     int x = int(position.x);
     int y = position.y;
@@ -387,7 +383,6 @@ std::unique_ptr <VisualSteps> Knight::show_possible_steps(Coordinate position,
                     int sz = steps_representation->possible_takes.size();
                     chess.attach(
                         steps_representation->possible_takes[sz - 1]);
-                    // delete tempf;
                 }
                 else
                 {
@@ -399,7 +394,6 @@ std::unique_ptr <VisualSteps> Knight::show_possible_steps(Coordinate position,
                     int sz = steps_representation->possible_steps.size();
                     chess.attach(
                         steps_representation->possible_steps[sz - 1]);
-                    // delete tempc;
                 }
             }
         }
@@ -442,10 +436,11 @@ int Bishop::correct_step(Cell& c1, Cell& c2, Chessboard& chess,
     return true;
 }
 
-std::unique_ptr <VisualSteps> Bishop::show_possible_steps(Coordinate position,
-                                         Chessboard& chess)
+std::unique_ptr<VisualSteps>
+Bishop::show_possible_steps(Coordinate position, Chessboard& chess)
 {
-    std::unique_ptr <VisualSteps> steps_representation{new VisualSteps{chess}};
+    std::unique_ptr<VisualSteps> steps_representation{
+        new VisualSteps{chess}};
 
     int x0 = int(position.x);
     int y0 = position.y;
@@ -464,31 +459,39 @@ std::unique_ptr <VisualSteps> Bishop::show_possible_steps(Coordinate position,
             //                        steps_representation, chess);
             while (!chess.out_of_range(Coordinate{char(x), y}))
             {
-            if (correct_step(chess[char(x0)][y0], chess[char(x)][y], chess))
-            {
-                if (chess[char(x)][y].has_figure())
+                if (correct_step(chess[char(x0)][y0], chess[char(x)][y],
+                                 chess))
                 {
-                    Frame* tempf = new Frame{chess[char(x)][y].center(), chess};
-                    steps_representation->possible_takes.push_back(tempf);
-                    int sz = steps_representation->possible_takes.size();
-                    chess.attach(steps_representation->possible_takes[sz - 1]);
-                    // delete tempf;
-                    break;
+                    if (chess[char(x)][y].has_figure())
+                    {
+                        Frame* tempf =
+                            new Frame{chess[char(x)][y].center(), chess};
+                        steps_representation->possible_takes.push_back(
+                            tempf);
+                        int sz =
+                            steps_representation->possible_takes.size();
+                        chess.attach(
+                            steps_representation->possible_takes[sz - 1]);
+
+                        break;
+                    }
+                    else
+                    {
+                        Circle* tempc = new Circle{
+                            chess[char(x)][y].center(), c_size / 4};
+                        tempc->set_color(chess_yellow);
+                        tempc->set_fill_color(chess_yellow);
+                        steps_representation->possible_steps.push_back(
+                            tempc);
+                        int sz =
+                            steps_representation->possible_steps.size();
+                        chess.attach(
+                            steps_representation->possible_steps[sz - 1]);
+                    }
                 }
-                else
-                {
-                    Circle* tempc =
-                        new Circle{chess[char(x)][y].center(), c_size / 4};
-                    tempc->set_color(chess_yellow);
-                    tempc->set_fill_color(chess_yellow);
-                    steps_representation->possible_steps.push_back(tempc);
-                    int sz = steps_representation->possible_steps.size();
-                    chess.attach(steps_representation->possible_steps[sz - 1]);
-                }
+                x += d1;
+                y += d2;
             }
-            x += d1;
-            y += d2;
-        }
         }
     }
 
@@ -563,10 +566,11 @@ int Queen::correct_step(Cell& c1, Cell& c2, Chessboard& chess,
     return true;
 }
 
-std::unique_ptr <VisualSteps> Queen::show_possible_steps(Coordinate position,
-                                        Chessboard& chess)
+std::unique_ptr<VisualSteps> Queen::show_possible_steps(Coordinate position,
+                                                        Chessboard& chess)
 {
-    std::unique_ptr <VisualSteps> steps_representation{new VisualSteps{chess}};
+    std::unique_ptr<VisualSteps> steps_representation{
+        new VisualSteps{chess}};
 
     int x0 = int(position.x);
     int y0 = position.y;
@@ -574,7 +578,7 @@ std::unique_ptr <VisualSteps> Queen::show_possible_steps(Coordinate position,
     int x, y;
 
     for (int d = -1; d <= 1; d += 2)
-        {
+    {
         for (int i = int(position.x) + d;
              i != a_ascii - 1 + (4.5 + 4.5 * d); i += d)
         {
@@ -589,7 +593,7 @@ std::unique_ptr <VisualSteps> Queen::show_possible_steps(Coordinate position,
                     int sz = steps_representation->possible_takes.size();
                     chess.attach(
                         steps_representation->possible_takes[sz - 1]);
-                    // delete tempf;
+
                     break;
                 }
                 else
@@ -602,7 +606,6 @@ std::unique_ptr <VisualSteps> Queen::show_possible_steps(Coordinate position,
                     int sz = steps_representation->possible_steps.size();
                     chess.attach(
                         steps_representation->possible_steps[sz - 1]);
-                    // delete tempc;
                 }
             }
         }
@@ -623,7 +626,7 @@ std::unique_ptr <VisualSteps> Queen::show_possible_steps(Coordinate position,
                     int sz = steps_representation->possible_takes.size();
                     chess.attach(
                         steps_representation->possible_takes[sz - 1]);
-                    // delete tempf;
+
                     break;
                 }
                 else
@@ -636,7 +639,6 @@ std::unique_ptr <VisualSteps> Queen::show_possible_steps(Coordinate position,
                     int sz = steps_representation->possible_steps.size();
                     chess.attach(
                         steps_representation->possible_steps[sz - 1]);
-                    // delete tempc;
                 }
             }
         }
@@ -649,33 +651,41 @@ std::unique_ptr <VisualSteps> Queen::show_possible_steps(Coordinate position,
             x = int(position.x) + d1;
             y = position.y + d2;
 
-    while (!chess.out_of_range(Coordinate{char(x), y}))
-    {
-        if (correct_step(chess[char(x0)][y0], chess[char(x)][y], chess))
-        {
-            if (chess[char(x)][y].has_figure())
+            while (!chess.out_of_range(Coordinate{char(x), y}))
             {
-                Frame* tempf = new Frame{chess[char(x)][y].center(), chess};
-                steps_representation->possible_takes.push_back(tempf);
-                int sz = steps_representation->possible_takes.size();
-                chess.attach(steps_representation->possible_takes[sz - 1]);
-                // delete tempf;
-                break;
+                if (correct_step(chess[char(x0)][y0], chess[char(x)][y],
+                                 chess))
+                {
+                    if (chess[char(x)][y].has_figure())
+                    {
+                        Frame* tempf =
+                            new Frame{chess[char(x)][y].center(), chess};
+                        steps_representation->possible_takes.push_back(
+                            tempf);
+                        int sz =
+                            steps_representation->possible_takes.size();
+                        chess.attach(
+                            steps_representation->possible_takes[sz - 1]);
+
+                        break;
+                    }
+                    else
+                    {
+                        Circle* tempc = new Circle{
+                            chess[char(x)][y].center(), c_size / 4};
+                        tempc->set_color(chess_yellow);
+                        tempc->set_fill_color(chess_yellow);
+                        steps_representation->possible_steps.push_back(
+                            tempc);
+                        int sz =
+                            steps_representation->possible_steps.size();
+                        chess.attach(
+                            steps_representation->possible_steps[sz - 1]);
+                    }
+                }
+                x += d1;
+                y += d2;
             }
-            else
-            {
-                Circle* tempc =
-                    new Circle{chess[char(x)][y].center(), c_size / 4};
-                tempc->set_color(chess_yellow);
-                tempc->set_fill_color(chess_yellow);
-                steps_representation->possible_steps.push_back(tempc);
-                int sz = steps_representation->possible_steps.size();
-                chess.attach(steps_representation->possible_steps[sz - 1]);
-            }
-        }
-        x += d1;
-        y += d2;
-        }
         }
     }
     return steps_representation;
@@ -693,12 +703,13 @@ int King::correct_step(Cell& c1, Cell& c2, Chessboard& chess,
     return true;
 }
 
-std::unique_ptr <VisualSteps> King::show_possible_steps(Coordinate position,
-                                       Chessboard& chess)
+std::unique_ptr<VisualSteps> King::show_possible_steps(Coordinate position,
+                                                       Chessboard& chess)
 {
     // I know it's less effective, but easier to read, maybe should be
     // rewritten
-    std::unique_ptr <VisualSteps> steps_representation{new VisualSteps{chess}};
+    std::unique_ptr<VisualSteps> steps_representation{
+        new VisualSteps{chess}};
     for (int i = 0; i < chess.N; i++)
         for (int j = 1; j <= chess.N; j++)
         {

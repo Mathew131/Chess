@@ -74,7 +74,6 @@ struct Chessboard : MyWindow
     static constexpr int width = N * Cell::size + 2 * margin + 70;
     static constexpr int height = N * Cell::size + 2 * margin;
 
-    // Vector_ref<Figure*> figures;
     std::vector<std::unique_ptr<Figure>> figures;
 
     step_color step_chooser;
@@ -106,5 +105,4 @@ struct Chessboard : MyWindow
     Cell* selected{nullptr};
 
     std::unique_ptr <VisualSteps> all_possible_steps;
-    //VisualSteps* all_possible_steps;
 };
